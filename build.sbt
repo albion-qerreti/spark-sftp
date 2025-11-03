@@ -15,6 +15,9 @@ libraryDependencies ++= Seq(
 
   "com.springml" % "sftp.client" % "1.0.3",
 
+  // https://mvnrepository.com/artifact/com.jcraft/jsch
+  "com.jcraft" % "jsch" % "0.1.55",
+
 // Dependenices for testing if testing is implemented
   "org.mockito" % "mockito-core" % "2.0.31-beta" % Test,
   "org.scalatest" %% "scalatest" % "3.0.3" % Test,

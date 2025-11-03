@@ -21,34 +21,35 @@ case class DatasetRelation(
 
     private val logger = Logger.getLogger(classOf[DatasetRelation])
 
-    val df = read()
+    val df: DataFrame = read()
 
     private def read(): DataFrame = {
-      var dataframeReader = sqlContext.read
+      var reader = sqlContext.read
       if (customSchema != null) {
-        dataframeReader = dataframeReader.schema(customSchema)
+        reader = reader.schema(customSchema)
       }
 
       var df: DataFrame = null
 
       df = fileType match {
-        case "avro" => dataframeReader.format("avro").load(fileLocation)
-        case "txt" => dataframeReader.format("text").load(fileLocation)
-        case "xml" => dataframeReader.format(constants.xmlClass)
+        case "avro" => reader.format("avro").load(fileLocation)
+        case "txt" => reader.format("text").load(fileLocation)
+        case "xml" => reader.format(constants.xmlClass)
           .option(constants.xmlRowTag, rowTag)
           .load(fileLocation)
-      case "csv" =>
-        reader.option("header", header)
-          .option("delimiter", delimiter)
-          .option("quote", quote)
-          .option("escape", escape)
-          .option("multiLine", multiLine)
-          .option("inferSchema", inferSchema)
-          .csv(fileLocation)
-      case other =>
-        reader.format(other).load(fileLocation)
+        case "csv" =>
+          reader.option("header", header)
+            .option("delimiter", delimiter)
+            .option("quote", quote)
+            .option("escape", escape)
+            .option("multiLine", multiLine)
+            .option("inferSchema", inferSchema)
+            .csv(fileLocation)
+        case other =>
+          reader.format(other).load(fileLocation)
+      }
+      df
     }
-  }
 
   override def schema: StructType = df.schema
 

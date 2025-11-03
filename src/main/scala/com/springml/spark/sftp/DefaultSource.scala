@@ -18,7 +18,6 @@ package com.springml.spark.sftp
 import java.io.File
 import java.util.UUID
 
-import com.springml.sftp.client.SFTPClient
 import com.springml.spark.sftp.util.Utils.ImplicitDataFrameWriter
 
 import org.apache.commons.io.FilenameUtils

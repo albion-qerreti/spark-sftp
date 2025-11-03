@@ -1,5 +1,3 @@
-// project/plugins.sbt
+// Plugin for Eclipse project support
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "5.2.4")
 
-// For signing and releasing artifacts to Maven Central / Sonatype
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.11.3")
-addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")

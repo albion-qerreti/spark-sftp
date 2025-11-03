@@ -7,35 +7,35 @@ import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types.StructType
 
 case class DatasetRelation(
-      fileLocation: String,
-      fileType: String,
-      inferSchema: String = "true",
-      header: String = "true",
-      delimiter: String = ",",
-      quote: String = "\"",
-      escape: String = "\\",
-      multiLine: String = "false",
-      rowTag: String = "row",
-      customSchema: StructType = null,
-      sqlContext: SQLContext
-    ) extends BaseRelation with TableScan {
+    fileLocation: String,
+    fileType: String,
+    inferSchema: String,
+    header: String,
+    delimiter: String,
+    quote: String,
+    escape: String,
+    multiLine: String,
+    rowTag: String,
+    customSchema: StructType,
+    sqlContext: SQLContext) extends BaseRelation with TableScan {
 
-  private val logger = Logger.getLogger(classOf[DatasetRelation])
+    private val logger = Logger.getLogger(classOf[DatasetRelation])
 
-  val df: DataFrame = read()
+    val df = read()
 
-  private def read(): DataFrame = {
-    var reader = sqlContext.read
-    if (customSchema != null) reader = reader.schema(customSchema)
+    private def read(): DataFrame = {
+      var dataframeReader = sqlContext.read
+      if (customSchema != null) {
+        dataframeReader = dataframeReader.schema(customSchema)
+      }
 
-    fileType.toLowerCase match {
-      case "avro" =>
-        reader.format("avro").load(fileLocation)
-      case "txt" =>
-        reader.format("text").load(fileLocation)
-      case "xml" =>
-        reader.format("com.databricks.spark.xml")
-          .option("rowTag", rowTag)
+      var df: DataFrame = null
+
+      df = fileType match {
+        case "avro" => dataframeReader.format("avro").load(fileLocation)
+        case "txt" => dataframeReader.format("text").load(fileLocation)
+        case "xml" => dataframeReader.format(constants.xmlClass)
+          .option(constants.xmlRowTag, rowTag)
           .load(fileLocation)
       case "csv" =>
         reader.option("header", header)

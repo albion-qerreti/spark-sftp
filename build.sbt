@@ -1,37 +1,27 @@
 name := "spark-sftp"
 organization := "com.springml"
+version := "1.1.4"
 
-// --- Core versions ---
 scalaVersion := "2.12.18"
-val sparkVersion = "3.5.1"
 
-libraryDependencies += "com.hierynomus" % "sshj" % "0.37.0"
-
+val sparkVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
-  "com.hierynomus" % "sshj" % "0.37.0",
+//  Spark dependenices
+  "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
+  "org.apache.spark" %% "spark-sql"  % sparkVersion % "provided",
+  "org.apache.spark" %% "spark-avro" % sparkVersion % "provided",
+  "com.databricks" % "spark-xml_2.12" % "0.15.0",
 
-  // optional: XML and Avro for Spark 3.x
-  "com.databricks" %% "spark-xml" % "0.18.0",
-  "org.apache.spark" %% "spark-avro" % sparkVersion,
+  "com.springml" % "sftp.client" % "1.0.3",
 
-  // testing
-  "org.mockito" % "mockito-core" % "5.13.0" % Test,
-  "org.scalatest" %% "scalatest" % "3.2.19" % Test
+// Dependenices for testing if testing is implemented
+  "org.mockito" % "mockito-core" % "2.0.31-beta" % Test,
+  "org.scalatest" %% "scalatest" % "3.0.3" % Test,
+  "org.apache.avro" % "avro-mapred" % "1.7.7" % Test exclude("org.mortbay.jetty", "servlet-api")
 )
 
-// Spark components
-libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion,
-  "org.apache.spark" %% "spark-sql" % sparkVersion
-)
-
-ThisBuild / organization := "com.springml"
-ThisBuild / version := "2.0.0-SNAPSHOT"
-
-
-fork := true
-
-javaOptions ++= Seq(
-  "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
+resolvers ++= Seq(
+  "Maven Central" at "https://repo1.maven.org/maven2/",
+  "Spark Packages Repo" at "https://dl.bintray.com/spark-packages/maven"
 )

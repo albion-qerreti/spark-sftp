@@ -4,35 +4,7 @@ A library for constructing dataframes by downloading files from SFTP and writing
 
 ## Requirements
 
-This library requires Spark 2.x.
-
-For Spark 1.x support, please check [spark1.x](https://github.com/springml/spark-sftp/tree/spark1.x) branch.
-
-## Linking
-You can link against this library in your program at the following ways:
-
-### Maven Dependency
-```
-<dependency>
-	<groupId>com.springml</groupId>
-	<artifactId>spark-sftp_2.11</artifactId>
-	<version>1.1.3</version>
-</dependency>
-
-```
-
-### SBT Dependency
-```
-libraryDependencies += "com.springml" % "spark-sftp_2.11" % "1.1.3"
-```
-
-
-## Using with Spark shell
-This package can be added to Spark using the `--packages` command line option.  For example, to include it when starting the spark shell:
-
-```
-$ bin/spark-shell --packages com.springml:spark-sftp_2.11:1.1.3
-```
+This library uses Spark 3.5.0 and Scala 2.12.18
 
 ## Features
 This package can be used to construct spark dataframe by downloading the files from SFTP server.
@@ -137,33 +109,6 @@ df.write().
       save("/ftp/files/sample.json");
 ```
 
-### R API
-Spark 1.5+:
-```r
-
-if (nchar(Sys.getenv("SPARK_HOME")) < 1) {
-  Sys.setenv(SPARK_HOME = "/home/spark")
-}
-library(SparkR, lib.loc = c(file.path(Sys.getenv("SPARK_HOME"), "R", "lib")))
-sparkR.session(master = "local[*]", sparkConfig = list(spark.driver.memory = "2g"))
-
-# Construct Spark dataframe using avro file in FTP server
-df <- read.df(path="/ftp/files/sample.avro",
-            source="com.springml.spark.sftp",
-            host="SFTP_HOST",
-            username="SFTP_USER",
-            pem="/home/user/mypem.pem",
-            fileType="avro")
-
-# Write dataframe as avro file to FTP server
-write.df(df,
-        path="/ftp/files/sample.avro",
-        source="com.springml.spark.sftp",
-        host="SFTP_HOST",
-        username="SFTP_USER",
-        pem="/home/user/mypem.pem",
-        fileType="avro")
-```
 
 ### Note
 1. SFTP files are fetched and written using [jsch](http://www.jcraft.com/jsch/). It will be executed as a single process
@@ -172,3 +117,5 @@ write.df(df,
 
 ## Building From Source
 This library is built with [SBT](http://www.scala-sbt.org/0.13/docs/Command-Line-Reference.html), which is automatically downloaded by the included shell script. To build a JAR file simply run `build/sbt package` from the project root.
+
+This library is build with SBT version 1.9.9. To build a JAR file simply run ``` sbt package ``` on the project root. It should be saved in ```Target/scala-<version>``` folder

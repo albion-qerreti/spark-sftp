@@ -33,20 +33,19 @@ case class DatasetRelation(
 
       df = fileType match {
         case "avro" => reader.format("avro").load(fileLocation)
-        case "txt" => reader.format("text").load(fileLocation)
+        case "text" => reader.format("text").load(fileLocation)
         case "xml" => reader.format(constants.xmlClass)
           .option(constants.xmlRowTag, rowTag)
           .load(fileLocation)
-        case "csv" =>
-          reader.option("header", header)
+        case "csv" => reader.option("header", header)
             .option("delimiter", delimiter)
             .option("quote", quote)
             .option("escape", escape)
             .option("multiLine", multiLine)
             .option("inferSchema", inferSchema)
             .csv(fileLocation)
-        case other =>
-          reader.format(other).load(fileLocation)
+        case other => reader.format(other)
+          .load(fileLocation)
       }
       df
     }
